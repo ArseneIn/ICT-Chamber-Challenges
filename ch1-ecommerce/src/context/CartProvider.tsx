@@ -1,29 +1,11 @@
-// src/context/CartContext.tsx
-import { createContext, useState, useEffect } from 'react';
+// src/context/CartProvider.tsx
+// This file only exports one thing: the CartProvider component.
+import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Product } from '../api/dummyjson';
+import { CartContext } from './cartContext';
+import type { CartItem } from './cartContext';
 
-// 1. Define the shape of a cart item (a Product + quantity)
-export interface CartItem {
-    product: Product;
-    quantity: number;
-}
-
-// 2. Define what our Cart Context will expose to the app
-export interface CartContextType {
-    cartItems: CartItem[];
-    addToCart: (product: Product) => void;
-    removeFromCart: (productId: number) => void;
-    updateQuantity: (productId: number, quantity: number) => void;
-    clearCart: () => void;
-    totalItems: number;
-    totalPrice: number;
-}
-
-// 3. Create the context (starts as undefined — we'll fill it in the Provider)
-export const CartContext = createContext<CartContextType | undefined>(undefined);
-
-// 4. The Provider — wraps your whole app and manages the cart state
 export function CartProvider({ children }: { children: ReactNode }) {
     // Load saved cart from localStorage on first render
     const [cartItems, setCartItems] = useState<CartItem[]>(() => {
@@ -41,14 +23,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setCartItems((prev) => {
             const existing = prev.find((item) => item.product.id === product.id);
             if (existing) {
-                // Product already in cart — just increase quantity
                 return prev.map((item) =>
                     item.product.id === product.id
                         ? { ...item, quantity: item.quantity + 1 }
                         : item
                 );
             }
-            // New product — add it with quantity 1
             return [...prev, { product, quantity: 1 }];
         });
     };
@@ -77,7 +57,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     // Total number of items (sum of all quantities)
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-    // Total price (each item price × quantity, summed up)
+    // Total price
     const totalPrice = cartItems.reduce(
         (sum, item) => sum + item.product.price * item.quantity,
         0
@@ -91,5 +71,3 @@ export function CartProvider({ children }: { children: ReactNode }) {
         </CartContext.Provider>
     );
 }
-
-

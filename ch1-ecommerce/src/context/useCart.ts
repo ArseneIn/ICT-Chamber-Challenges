@@ -1,7 +1,8 @@
 // src/context/useCart.ts
 import { useContext } from 'react';
-import { CartContext } from './CartContext';
-import type { CartContextType } from './CartContext';
+import { CartContext } from './cartContext';
+import type { CartContextType } from './cartContext';
+
 
 // Custom Hook — makes using the cart super clean in any component
 // Usage: const { cartItems, addToCart, totalItems } = useCart();
