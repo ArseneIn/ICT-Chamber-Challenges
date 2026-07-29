@@ -1,8 +1,9 @@
 // src/components/Navbar.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, Globe, User, ShieldCheck, Sparkles, ChevronDown, X } from 'lucide-react';
+import { ShoppingCart, Menu, Globe, User, ShieldCheck, Sparkles, ChevronDown, X, Heart } from 'lucide-react';
 import { useCart } from '../context/useCart';
+import { useWishlist } from '../context/useWishlist';
 import CategoriesMegaMenu from './CategoriesMegaMenu';
 import './Navbar.css';
 
@@ -27,6 +28,7 @@ function RwandaFlag() {
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const { totalFavorites } = useWishlist();
   const [isCategoriesHovered, setIsCategoriesHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -95,6 +97,17 @@ export default function Navbar() {
                 <ChevronDown size={12} className="widget-arrow" />
               </div>
             </div>
+
+            {/* Favorites / Wishlist Link */}
+            <Link to="/wishlist" className="wishlist-nav-link" title="View Saved Favorites" onClick={() => setIsMobileMenuOpen(false)}>
+              <div className="wishlist-icon-wrapper">
+                <Heart size={20} className={totalFavorites > 0 ? "filled-heart" : ""} fill={totalFavorites > 0 ? "currentColor" : "none"} />
+                {totalFavorites > 0 && (
+                  <span className="wishlist-badge">{totalFavorites}</span>
+                )}
+              </div>
+              <span className="cart-label desktop-only">Wish list</span>
+            </Link>
 
             {/* Shopping Cart Link (Always Visible) */}
             <Link to="/cart" className="cart-link" title="View Shopping Cart" onClick={() => setIsMobileMenuOpen(false)}>

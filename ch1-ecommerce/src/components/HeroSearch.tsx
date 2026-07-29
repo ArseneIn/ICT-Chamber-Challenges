@@ -1,7 +1,7 @@
 // src/components/HeroSearch.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Camera, Sparkles } from 'lucide-react';
+import { Search, Camera } from 'lucide-react';
 import type { FormEvent } from 'react';
 import './HeroSearch.css';
 
@@ -23,17 +23,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
 
   return (
     <div className="hero-search-wrapper">
-      {/* Search Mode Tabs */}
       <div className="search-tabs">
-        <button
-          type="button"
-          className={`search-tab ${activeTab === 'ai' ? 'active' : ''}`}
-          onClick={() => setActiveTab('ai')}
-        >
-          <Sparkles size={16} className="tab-sparkle" />
-          <span>AI Mode</span>
-        </button>
-
         <span className="tab-separator">|</span>
 
         <button

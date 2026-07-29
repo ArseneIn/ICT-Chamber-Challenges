@@ -19,20 +19,23 @@ import {
 import { fetchProductById } from '../api/dummyjson';
 import type { Product } from '../api/dummyjson';
 import { useCart } from '../context/useCart';
+import { useWishlist } from '../context/useWishlist';
 import SkeletonLoader from '../components/SkeletonLoader';
 import './ProductDetailsPage.css';
 
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState<boolean>(false);
+
+  const isLiked = product ? isInWishlist(product.id) : false;
 
   useEffect(() => {
     if (!id) return;
@@ -139,8 +142,8 @@ export default function ProductDetailsPage() {
               <img src={selectedImage} alt={product.title} className="main-preview-img" />
               <button
                 className={`favorite-btn ${isLiked ? 'liked' : ''}`}
-                onClick={() => setIsLiked(!isLiked)}
-                title="Save to Wishlist"
+                onClick={() => product && toggleWishlist(product)}
+                title={isLiked ? 'Remove from Wishlist' : 'Save to Wishlist'}
               >
                 <Heart size={20} fill={isLiked ? 'currentColor' : 'none'} />
               </button>

@@ -7,6 +7,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import CategoriesPage from './pages/CategoriesPage';
 import CategoryProductsPage from './pages/CategoryProductsPage';
 import CartPage from './pages/CartPage';
+import WishlistPage from './pages/WishlistPage';
 
 // Layout Components
 import Navbar from './components/Navbar';
@@ -25,6 +26,7 @@ function App() {
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/categories/:slug" element={<CategoryProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
       </Routes>
 
       {/* Global Marketplace Footer */}

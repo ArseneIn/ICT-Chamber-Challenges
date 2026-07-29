@@ -1,10 +1,11 @@
 // src/components/ProductCard.tsx
 import { Link } from 'react-router-dom';
-import { Star, ShoppingCart, Check, Tag } from 'lucide-react';
+import { Star, ShoppingCart, Check, Tag, Heart } from 'lucide-react';
 import { useState } from 'react';
-import type { FormEvent } from 'react';
+import type { FormEvent, MouseEvent } from 'react';
 import type { Product } from '../api/dummyjson';
 import { useCart } from '../context/useCart';
+import { useWishlist } from '../context/useWishlist';
 import './ProductCard.css';
 
 interface ProductCardProps {
@@ -13,13 +14,22 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [added, setAdded] = useState(false);
+
+  const isFavorite = isInWishlist(product.id);
 
   const handleAddToCart = (e: FormEvent) => {
     e.preventDefault();
     addToCart(product);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
+  };
+
+  const handleToggleFavorite = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product);
   };
 
   const originalPrice = (product.price / (1 - product.discountPercentage / 100)).toFixed(2);
@@ -41,6 +51,15 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           )}
           <span className="badge category-badge">{product.category}</span>
+
+          {/* Favorite Heart Button */}
+          <button
+            className={`card-heart-btn ${isFavorite ? 'active' : ''}`}
+            onClick={handleToggleFavorite}
+            title={isFavorite ? 'Remove from Wishlist' : 'Add to Wishlist'}
+          >
+            <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />
+          </button>
         </div>
 
         <div className="product-info">
