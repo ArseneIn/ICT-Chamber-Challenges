@@ -1,5 +1,6 @@
 /* src/pages/HomePage.css */
 .home-page {
+  padding-top: var(--space-6);
   padding-bottom: var(--space-16);
 }
 

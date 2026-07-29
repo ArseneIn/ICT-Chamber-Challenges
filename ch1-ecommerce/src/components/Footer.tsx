@@ -1,6 +1,6 @@
 // src/components/Footer.tsx
 import { Link } from 'react-router-dom';
-import { Truck, ShieldCheck, CreditCard, Headphones, Heart } from 'lucide-react';
+import { Truck, ShieldCheck, CreditCard, Headphones } from 'lucide-react';
 import './Footer.css';
 
 export default function Footer() {
@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="footer-col brand-col">
             <Link to="/" className="footer-logo">
               <img
-                src="/shuwadilu-horizontal.png"
+                src="/shuwadilu-footer-logo.png"
                 alt="Shuwadilu"
                 className="footer-brand-img"
               />

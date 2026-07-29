@@ -23,7 +23,7 @@ export default function CategoriesPage() {
     <main className="container categories-page">
       <div className="categories-header">
         <h1>Product Categories</h1>
-        <p>Explore Shuwadilu's curated catalog by product category.</p>
+        <p>Explore Shuwadilu's by product category.</p>
       </div>
 
       {loading ? (

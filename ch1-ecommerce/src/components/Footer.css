@@ -1,15 +1,17 @@
 /* src/components/Footer.css */
 .app-footer {
-  margin-top: auto;
-  background-color: var(--bg-surface);
-  border-top: 1px solid var(--border-default);
+  margin-top: var(--space-12);
+  display: flex;
+  flex-direction: column;
 }
 
-/* 1. Guarantee Banner */
+/* 1. Guarantee Banner — Transition Bridge from Content */
 .footer-guarantee-banner {
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
   padding: var(--space-6) 0;
+  box-shadow: var(--shadow-sm);
 }
 
 .guarantee-grid {
@@ -38,7 +40,7 @@
 .guarantee-item h4 {
   font-size: var(--text-sm);
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--text-heading);
   margin-bottom: 2px;
 }
 
@@ -47,8 +49,10 @@
   color: var(--text-muted);
 }
 
-/* 2. Main Footer Links */
+/* 2. Main Footer Links — Rich Dark Evergreen Section */
 .footer-main {
+  background-color: var(--color-evergreen);
+  color: #f8fafc;
   padding: var(--space-12) 0;
 }
 
@@ -88,7 +92,7 @@
 
 .brand-tagline {
   font-size: var(--text-xs);
-  color: var(--text-secondary);
+  color: #cbd5e1;
   line-height: 1.6;
   max-width: 320px;
 }
@@ -96,13 +100,13 @@
 .location-info {
   font-size: var(--text-xs);
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--color-malachite);
 }
 
 .footer-col h3 {
   font-size: var(--text-sm);
   font-weight: 800;
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: var(--space-4);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -117,20 +121,20 @@
 
 .footer-col ul a {
   font-size: var(--text-xs);
-  color: var(--text-secondary);
+  color: #cbd5e1;
   text-decoration: none;
   font-weight: 500;
   transition: var(--transition-fast);
 }
 
 .footer-col ul a:hover {
-  color: var(--color-sea-green);
+  color: var(--color-malachite);
 }
 
 /* 3. Bottom Bar */
 .footer-bottom {
-  background: var(--bg-base);
-  border-top: 1px solid var(--border-subtle);
+  background: #06150c;
+  border-top: 1px solid var(--color-black-forest);
   padding: var(--space-4) 0;
 }
 
@@ -144,7 +148,7 @@
 
 .copyright-text {
   font-size: var(--text-xs);
-  color: var(--text-muted);
+  color: #94a3b8;
 }
 
 .legal-links {
@@ -152,16 +156,16 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--text-xs);
-  color: var(--text-muted);
+  color: #94a3b8;
 }
 
 .legal-links a {
-  color: var(--text-muted);
+  color: #94a3b8;
   text-decoration: none;
 }
 
 .legal-links a:hover {
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .payment-badges {
@@ -171,9 +175,9 @@
 }
 
 .pay-badge {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  color: var(--text-primary);
+  background: var(--color-black-forest);
+  border: 1px solid var(--color-sea-green);
+  color: #ffffff;
   font-size: 10px;
   font-weight: 700;
   padding: 3px 8px;

@@ -1,123 +1,93 @@
 /* =========================================
-   src/index.css — Light Mint & Emerald Design System
-   Color Palette:
-   - Light Mint:   #e6fff0 (Base Background)
-   - Evergreen:    #0d2818 (Primary Text & Deep Surfaces)
-   - Black Forest: #04471c (Sub-titles & Dark Accents)
-   - Sea Green:    #058c42 (Brand Primary & CTA)
-   - Malachite:    #16db65 (Vibrant Highlights & Badges)
+   src/index.css — Shuwadilu Harmonized Design System
    ========================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  /* 🎨 Custom Brand Color Tokens */
-  --color-light: #e6fff0;
-  --color-evergreen: #0d2818;
-  --color-black-forest: #04471c;
-  --color-sea-green: #058c42;
-  --color-malachite: #16db65;
+  /* 🎨 Shuwadilu Brand Color Tokens */
+  --color-light:        #f4fbf6;                  /* Soft, clean off-white mint canvas */
+  --color-evergreen:    #0d2818;                  /* Rich dark evergreen for headers/footer */
+  --color-black-forest: #04471c;                  /* Deep forest green for dark accents */
+  --color-sea-green:    #058c42;                  /* Shuwadilu primary brand green */
+  --color-malachite:    #16db65;                  /* Vibrant neon green for glows & badges */
 
-  /* 🌟 Theme Role Mapping (Light Emerald Theme) */
-  --color-primary: var(--color-sea-green);
-  /* #058c42 - Primary CTA */
-  --color-primary-dark: var(--color-black-forest);
-  /* #04471c - Hover state */
-  --color-primary-light: var(--color-malachite);
-  /* #16db65 - Active highlight */
+  /* 🌟 Theme Role Mapping */
+  --color-primary:       var(--color-sea-green);   /* #058c42 - Primary CTA */
+  --color-primary-dark:  var(--color-black-forest);/* #04471c - Hover state */
+  --color-primary-light: var(--color-malachite);   /* #16db65 - Active highlight */
 
-  --color-success: #059669;
-  --color-warning: #d97706;
-  --color-danger: #dc2626;
+  --color-success:       #059669;
+  --color-warning:       #d97706;
+  --color-danger:        #dc2626;
 
   /* ☀️ Light Mode Background Layers */
-  --bg-base: var(--color-light);
-  /* #e6fff0 - Soft light mint app bg */
-  --bg-surface: #ffffff;
-  /* Pure white crisp cards & navbar */
-  --bg-elevated: #f0fff5;
-  /* Elevated card hover / pills */
-  --bg-overlay: rgba(13, 40, 24, 0.4);
-  /* Backdrop overlay */
+  --bg-base:       var(--color-light);            /* #f4fbf6 - Elegant canvas background */
+  --bg-surface:    #ffffff;                       /* Pure white crisp cards & navbar */
+  --bg-elevated:   #edf7f1;                       /* Soft elevated card hover / pills */
+  --bg-overlay:    rgba(13, 40, 24, 0.4);         /* Backdrop overlay */
 
-  /* 📝 Typography (High Contrast Dark Text) */
-  --text-primary: var(--color-evergreen);
-  /* #0d2818 - Deep dark forest text */
-  --text-secondary: var(--color-black-forest);
-  /* #04471c - Medium contrast */
-  --text-muted: #475569;
-  /* Slate muted text */
+  /* 📝 Typography (High Contrast Charcoal & Dark Forest) */
+  --text-primary:   #0f172a;                      /* Deep charcoal main body text */
+  --text-heading:   var(--color-evergreen);        /* #0d2818 - Dark forest for headings */
+  --text-secondary: #334155;                      /* Medium slate contrast */
+  --text-muted:     #64748b;                      /* Muted captions */
 
-  /* 🖼️ Light Mode Borders */
-  --border-subtle: #d1fae5;
-  --border-default: #a7f3d0;
-  /* Soft mint border */
-  --border-strong: var(--color-sea-green);
-  /* #058c42 */
+  /* 🖼️ Subtle Borders */
+  --border-subtle:  #e2e8f0;
+  --border-default: #dcfce7;                      /* Elegant soft mint border */
+  --border-strong:  var(--color-sea-green);       /* #058c42 */
 
   /* 📐 Spacing Scale */
-  --space-1: 0.25rem;
-  /*  4px */
-  --space-2: 0.5rem;
-  /*  8px */
-  --space-3: 0.75rem;
-  /* 12px */
-  --space-4: 1rem;
-  /* 16px */
-  --space-5: 1.25rem;
-  /* 20px */
-  --space-6: 1.5rem;
-  /* 24px */
-  --space-8: 2rem;
-  /* 32px */
-  --space-10: 2.5rem;
-  /* 40px */
-  --space-12: 3rem;
-  /* 48px */
-  --space-16: 4rem;
-  /* 64px */
+  --space-1:  0.25rem;  /*  4px */
+  --space-2:  0.5rem;   /*  8px */
+  --space-3:  0.75rem;  /* 12px */
+  --space-4:  1rem;     /* 16px */
+  --space-5:  1.25rem;  /* 20px */
+  --space-6:  1.5rem;   /* 24px */
+  --space-8:  2rem;     /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
 
   /* 🔠 Fonts */
   --font-sans: 'Avenir Next', 'Avenir', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Fira Code', ui-monospace, Consolas, monospace;
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
   --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
 
   /* 🔲 Radii */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
   --radius-full: 9999px;
 
-  /* 🌫️ Light Compatible Shadows & Emerald Glow */
-  --shadow-sm: 0 1px 3px rgba(13, 40, 24, 0.08);
-  --shadow-md: 0 4px 14px rgba(13, 40, 24, 0.10);
-  --shadow-lg: 0 10px 25px rgba(13, 40, 24, 0.15);
-  --shadow-glow: 0 0 20px rgba(5, 140, 66, 0.22);
-  /* Elegant emerald glow */
+  /* 🌫️ Shadows & Glow */
+  --shadow-sm:   0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
+  --shadow-md:   0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg:   0 10px 25px rgba(15, 23, 42, 0.12);
+  --shadow-glow: 0 0 20px rgba(5, 140, 66, 0.18);  /* Subtle emerald glow */
 
   /* ⚡ Transitions */
-  --transition-fast: all 0.15s ease;
+  --transition-fast:   all 0.15s ease;
   --transition-normal: all 0.25s ease;
-  --transition-slow: all 0.4s ease;
+  --transition-slow:   all 0.4s ease;
 
   /* 📏 Layout */
   --max-width: 1280px;
-  --navbar-height: 64px;
+  --navbar-height: 72px;
 }
 
 /* Global Reset & Base Styles */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -143,15 +113,10 @@ body {
   flex-direction: column;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
-  color: var(--text-primary);
+  color: var(--text-heading);
 }
 
 a {
@@ -185,5 +150,5 @@ button {
 
 main {
   flex: 1;
-  padding: var(--space-8) 0;
+  padding: var(--space-10) 0 var(--space-16) 0;
 }
