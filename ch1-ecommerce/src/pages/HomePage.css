@@ -1,6 +1,6 @@
 /* src/pages/HomePage.css */
 .home-page {
-  padding-top: var(--space-6);
+  padding-top: var(--space-8);
   padding-bottom: var(--space-16);
 }
 
@@ -19,7 +19,8 @@
   flex-wrap: wrap;
 }
 
-.category-pills {
+/* Category Pills Filter Row */
+.pills-container {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -61,20 +62,21 @@
   gap: var(--space-2);
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
-  padding: 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
 
-.sort-icon {
-  color: var(--color-sea-green);
+.sort-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .sort-select {
   background: transparent;
-  border: none;
   color: var(--text-primary);
-  padding: var(--space-2) 0;
+  border: none;
   font-size: var(--text-xs);
   font-weight: 600;
   outline: none;
@@ -119,37 +121,40 @@
   gap: var(--space-6);
 }
 
-/* State Boxes (Error / Empty) */
-.state-box {
-  text-align: center;
-  padding: var(--space-12) var(--space-6);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-lg);
+/* State Messages */
+.loading-box, .error-box, .empty-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
-  box-shadow: var(--shadow-md);
-}
-
-.state-icon.danger {
-  color: var(--color-danger);
+  justify-content: center;
+  padding: var(--space-16) var(--space-4);
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  margin: var(--space-8) 0;
 }
 
 .retry-btn {
+  margin-top: var(--space-4);
   background: var(--color-sea-green);
   color: white;
   border: none;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-md);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  transition: var(--transition-fast);
+  font-weight: 700;
 }
 
-.retry-btn:hover {
-  background: var(--color-black-forest);
+/* Mobile Responsiveness Rules */
+@media (max-width: 600px) {
+  .controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-3);
+  }
 }
