@@ -12,6 +12,18 @@ export interface Product {
     stock: number;
     tags: string[];
     brand?: string;
+    sku?: string;
+    weight?: number;
+    dimensions?: {
+        width: number;
+        height: number;
+        depth: number;
+    };
+    warrantyInformation?: string;
+    shippingInformation?: string;
+    availabilityStatus?: string;
+    returnPolicy?: string;
+    minimumOrderQuantity?: number;
     thumbnail: string;
     images: string[];
     reviews?: {
@@ -19,6 +31,7 @@ export interface Product {
         comment: string;
         date: string;
         reviewerName: string;
+        reviewerEmail?: string;
     }[];
 }
 

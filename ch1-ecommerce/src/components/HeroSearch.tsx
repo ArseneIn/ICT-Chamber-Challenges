@@ -1,0 +1,91 @@
+// src/components/HeroSearch.tsx
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Camera, Sparkles } from 'lucide-react';
+import type { FormEvent } from 'react';
+import './HeroSearch.css';
+
+interface HeroSearchProps {
+  initialQuery?: string;
+}
+
+export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
+  const [activeTab, setActiveTab] = useState<'ai' | 'products' | 'manufacturers' | 'worldwide'>('products');
+  const [query, setQuery] = useState(initialQuery);
+  const navigate = useNavigate();
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/?search=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  return (
+    <div className="hero-search-wrapper">
+      {/* Search Mode Tabs */}
+      <div className="search-tabs">
+        <button
+          type="button"
+          className={`search-tab ${activeTab === 'ai' ? 'active' : ''}`}
+          onClick={() => setActiveTab('ai')}
+        >
+          <Sparkles size={16} className="tab-sparkle" />
+          <span>AI Mode</span>
+        </button>
+
+        <span className="tab-separator">|</span>
+
+        <button
+          type="button"
+          className={`search-tab ${activeTab === 'products' ? 'active' : ''}`}
+          onClick={() => setActiveTab('products')}
+        >
+          <span>Products</span>
+          {activeTab === 'products' && <div className="tab-indicator" />}
+        </button>
+
+        <button
+          type="button"
+          className={`search-tab ${activeTab === 'manufacturers' ? 'active' : ''}`}
+          onClick={() => setActiveTab('manufacturers')}
+        >
+          <span>Manufacturers</span>
+          {activeTab === 'manufacturers' && <div className="tab-indicator" />}
+        </button>
+
+        <button
+          type="button"
+          className={`search-tab ${activeTab === 'worldwide' ? 'active' : ''}`}
+          onClick={() => setActiveTab('worldwide')}
+        >
+          <span>Worldwide</span>
+          {activeTab === 'worldwide' && <div className="tab-indicator" />}
+        </button>
+      </div>
+
+      {/* Prominent Floating Rounded Search Container */}
+      <form className="hero-search-bar" onSubmit={handleSearch}>
+        <div className="search-input-group">
+          <input
+            type="text"
+            placeholder="Search products, brands, or tech (e.g. laptop, smartphone)..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="hero-search-input"
+          />
+
+          <button type="button" className="image-search-btn" title="Image Search">
+            <Camera size={18} />
+            <span>Image Search</span>
+          </button>
+        </div>
+
+        <button type="submit" className="hero-search-btn">
+          <Search size={18} />
+          <span>Search</span>
+        </button>
+      </form>
+    </div>
+  );
+}

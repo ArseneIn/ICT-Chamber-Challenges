@@ -1,0 +1,25 @@
+/* src/pages/CategoryProductsPage.css */
+.category-products-page {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-16);
+}
+
+.cat-header-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.cat-title {
+  font-size: var(--text-3xl);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.cat-count {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
