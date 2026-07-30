@@ -1,7 +1,7 @@
 // src/components/HeroSearch.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Camera } from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { FormEvent } from 'react';
 import './HeroSearch.css';
 
@@ -40,7 +40,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
           className={`search-tab ${activeTab === 'manufacturers' ? 'active' : ''}`}
           onClick={() => setActiveTab('manufacturers')}
         >
-          <span>Manufacturers</span>
+          <span>Sellers</span>
           {activeTab === 'manufacturers' && <div className="tab-indicator" />}
         </button>
 
@@ -49,7 +49,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
           className={`search-tab ${activeTab === 'worldwide' ? 'active' : ''}`}
           onClick={() => setActiveTab('worldwide')}
         >
-          <span>Worldwide</span>
+          <span>Manufacturers</span>
           {activeTab === 'worldwide' && <div className="tab-indicator" />}
         </button>
       </div>
@@ -65,10 +65,10 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
             className="hero-search-input"
           />
 
-          <button type="button" className="image-search-btn" title="Image Search">
+          {/*<button type="button" className="image-search-btn" title="Image Search">
             <Camera size={18} />
             <span>Image Search</span>
-          </button>
+          </button>*/}
         </div>
 
         <button type="submit" className="hero-search-btn">

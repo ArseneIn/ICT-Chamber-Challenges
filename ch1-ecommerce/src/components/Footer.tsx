@@ -58,7 +58,7 @@ export default function Footer() {
             <p className="brand-tagline">
               The premier marketplace platform for tech, consumer goods, and verified suppliers powered by ICT Chamber.
             </p>
-            <p className="location-info">📍 Kigali, Rwanda</p>
+            <p className="location-info"> Kigali, Rwanda</p>
           </div>
 
           {/* Col 1: Customer Service */}
@@ -113,12 +113,6 @@ export default function Footer() {
             <Link to="/">Security</Link>
           </div>
 
-          <div className="payment-badges">
-            <span className="pay-badge">MTN Mobile Money</span>
-            <span className="pay-badge">Airtel Money</span>
-            <span className="pay-badge">Visa</span>
-            <span className="pay-badge">Mastercard</span>
-          </div>
         </div>
       </div>
     </footer>

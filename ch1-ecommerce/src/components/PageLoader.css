@@ -1,0 +1,173 @@
+/* src/components/PageLoader.css */
+.page-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 251, 246, 0.97);
+  backdrop-filter: blur(14px);
+  user-select: none;
+  overflow: hidden;
+}
+
+.page-loader-container.full-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+}
+
+.page-loader-container.inline {
+  width: 100%;
+  min-height: 480px;
+  border-radius: var(--radius-xl);
+  padding: var(--space-16);
+}
+
+/* Floating Product Icons Layer */
+.floating-icons-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.float-icon {
+  position: absolute;
+  color: var(--color-sea-green);
+  opacity: 0.18;
+  filter: drop-shadow(0 6px 14px rgba(5, 140, 66, 0.25));
+  animation: floatFade 4s ease-in-out infinite alternate;
+}
+
+.icon-1 { top: 10%; left: 12%; animation-delay: 0s; }
+.icon-2 { top: 15%; right: 14%; animation-delay: 0.6s; }
+.icon-3 { bottom: 20%; left: 10%; animation-delay: 1.2s; }
+.icon-4 { bottom: 18%; right: 12%; animation-delay: 1.8s; }
+.icon-5 { top: 45%; left: 6%; animation-delay: 0.4s; }
+.icon-6 { top: 40%; right: 8%; animation-delay: 1.4s; }
+.icon-7 { bottom: 8%; left: 45%; animation-delay: 0.8s; }
+.icon-8 { top: 8%; left: 48%; animation-delay: 1.6s; }
+
+@keyframes floatFade {
+  0% {
+    transform: translateY(0px) scale(0.9) rotate(0deg);
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-24px) scale(1.15) rotate(14deg);
+    opacity: 0.2;
+  }
+}
+
+/* Core Loader Box */
+.loader-core {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-8);
+}
+
+/* Concentric Rotating Emerald Circles */
+.ripple-circle {
+  position: absolute;
+  border-radius: var(--radius-full);
+}
+
+.circle-outer {
+  width: 180px;
+  height: 180px;
+  border: 3px dashed rgba(5, 140, 66, 0.45);
+  border-top-color: var(--color-sea-green);
+  border-bottom-color: var(--color-malachite);
+  animation: spinClockwise 2.6s linear infinite;
+}
+
+.circle-middle {
+  width: 145px;
+  height: 145px;
+  border: 3px solid transparent;
+  border-left-color: var(--color-sea-green);
+  border-right-color: var(--color-black-forest);
+  animation: spinCounterClockwise 1.9s linear infinite;
+}
+
+.circle-inner {
+  width: 110px;
+  height: 110px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  box-shadow: 0 6px 25px rgba(5, 140, 66, 0.22);
+}
+
+@keyframes spinClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinCounterClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* Central Shuwadilu Mark with Blinking Pulse */
+.mark-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blinking-shuwadilu-mark {
+  width: 58px;
+  height: auto;
+  object-fit: contain;
+  animation: pulseBreathe 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseBreathe {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.7;
+    filter: drop-shadow(0 0 4px rgba(5, 140, 66, 0.3));
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+    filter: drop-shadow(0 0 18px rgba(5, 140, 66, 0.8));
+  }
+}
+
+/* Loader Text Group */
+.loader-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.loader-text-group .brand-name {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--color-sea-green);
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+}
+
+.loader-text-group .loading-status {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}

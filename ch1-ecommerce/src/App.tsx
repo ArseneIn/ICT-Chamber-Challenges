@@ -1,4 +1,5 @@
 // src/App.tsx
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 // Pages
@@ -9,11 +10,26 @@ import CategoryProductsPage from './pages/CategoryProductsPage';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
 
-// Layout Components
+// Layout & Loading Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import PageLoader from './components/PageLoader';
+import FloatingCart from './components/FloatingCart';
 
 function App() {
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 1100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (initialLoading) {
+    return <PageLoader loadingText="Launching Shuwadilu Marketplace..." fullScreen />;
+  }
+
   return (
     <div className="app">
       {/* Navbar shows on every page */}
@@ -28,6 +44,9 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
       </Routes>
+
+      {/* Floating Quick Cart Action Button */}
+      <FloatingCart />
 
       {/* Global Marketplace Footer */}
       <Footer />
