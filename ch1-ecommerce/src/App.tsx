@@ -10,11 +10,12 @@ import CategoryProductsPage from './pages/CategoryProductsPage';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
 
-// Layout & Loading Components
+// Layout & Utility Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PageLoader from './components/PageLoader';
 import FloatingCart from './components/FloatingCart';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -32,6 +33,9 @@ function App() {
 
   return (
     <div className="app">
+      {/* Automatically reset scroll position to top (0, 0) on route change */}
+      <ScrollToTop />
+
       {/* Navbar shows on every page */}
       <Navbar />
 
