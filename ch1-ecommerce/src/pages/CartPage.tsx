@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../context/useCart';
+import { useCurrency } from '../context/useCurrency';
 import './CartPage.css';
 
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, clearCart, totalPrice, totalItems } = useCart();
+  const { formatPrice } = useCurrency();
   const [checkedOut, setCheckedOut] = useState(false);
 
   const handleCheckout = () => {
@@ -65,7 +67,7 @@ export default function CartPage() {
                   {product.title}
                 </Link>
                 <span className="cart-item-category">{product.category}</span>
-                <span className="cart-item-unit-price">${product.price.toFixed(2)} each</span>
+                <span className="cart-item-unit-price">{formatPrice(product.price)} each</span>
               </div>
 
               {/* Quantity Controls */}
@@ -89,7 +91,7 @@ export default function CartPage() {
 
               {/* Line Total */}
               <div className="cart-item-total">
-                ${(product.price * quantity).toFixed(2)}
+                {formatPrice(product.price * quantity)}
               </div>
 
               {/* Remove Button */}
@@ -115,7 +117,7 @@ export default function CartPage() {
 
           <div className="summary-row">
             <span>Subtotal:</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>{formatPrice(totalPrice)}</span>
           </div>
 
           <div className="summary-row">
@@ -127,7 +129,7 @@ export default function CartPage() {
 
           <div className="summary-row total-row">
             <span>Grand Total:</span>
-            <span className="grand-total">${totalPrice.toFixed(2)}</span>
+            <span className="grand-total">{formatPrice(totalPrice)}</span>
           </div>
 
           <button onClick={handleCheckout} className="checkout-btn">

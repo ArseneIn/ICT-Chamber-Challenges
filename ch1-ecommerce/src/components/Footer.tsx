@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="guarantee-item">
             <Truck size={24} className="g-icon" />
             <div>
-              <h4>Express Global Shipping</h4>
+              <h4>Countrywide Shipping</h4>
               <p>Fast dispatch & trackable delivery</p>
             </div>
           </div>
@@ -78,7 +78,6 @@ export default function Footer() {
             <h3>About Shuwadilu</h3>
             <ul>
               <li><Link to="/">Corporate Overview</Link></li>
-              <li><Link to="/">ICT Chamber Partnership</Link></li>
               <li><Link to="/categories">Product Catalog</Link></li>
               <li><Link to="/">Sustainability & Impact</Link></li>
               <li><Link to="/">Careers & Press</Link></li>

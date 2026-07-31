@@ -6,6 +6,7 @@ import type { FormEvent, MouseEvent } from 'react';
 import type { Product } from '../api/dummyjson';
 import { useCart } from '../context/useCart';
 import { useWishlist } from '../context/useWishlist';
+import { useCurrency } from '../context/useCurrency';
 import './ProductCard.css';
 
 interface ProductCardProps {
@@ -15,6 +16,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { formatPrice } = useCurrency();
   const [added, setAdded] = useState(false);
 
   const isFavorite = isInWishlist(product.id);
@@ -32,7 +34,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     toggleWishlist(product);
   };
 
-  const originalPrice = (product.price / (1 - product.discountPercentage / 100)).toFixed(2);
+  const rawOriginalPrice = product.price / (1 - product.discountPercentage / 100);
 
   return (
     <div className="product-card">
@@ -76,9 +78,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <div className="product-footer">
             <div className="price-box">
-              <span className="current-price">${product.price.toFixed(2)}</span>
+              <span className="current-price">{formatPrice(product.price)}</span>
               {product.discountPercentage > 0 && (
-                <span className="original-price">${originalPrice}</span>
+                <span className="original-price">{formatPrice(rawOriginalPrice)}</span>
               )}
             </div>
 

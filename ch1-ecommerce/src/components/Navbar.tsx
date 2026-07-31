@@ -1,9 +1,11 @@
 // src/components/Navbar.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, Globe, User, ShieldCheck, Sparkles, ChevronDown, X, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, Globe, User, ShieldCheck, Sparkles, ChevronDown, X, Heart, Check } from 'lucide-react';
 import { useCart } from '../context/useCart';
 import { useWishlist } from '../context/useWishlist';
+import { useCurrency } from '../context/useCurrency';
+import type { CurrencyCode } from '../context/currencyContext';
 import CategoriesMegaMenu from './CategoriesMegaMenu';
 import './Navbar.css';
 
@@ -29,8 +31,11 @@ function RwandaFlag() {
 export default function Navbar() {
   const { totalItems } = useCart();
   const { totalFavorites } = useWishlist();
+  const { currency, setCurrency, availableCurrencies } = useCurrency();
+
   const [isCategoriesHovered, setIsCategoriesHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
 
   return (
     <header className="navbar-header">
@@ -90,11 +95,37 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Language & Currency Selector Widget */}
-              <div className="nav-widget lang-widget" title="Language & Currency">
-                <Globe size={16} className="lang-icon" />
-                <span className="lang-text">English-RWF</span>
-                <ChevronDown size={12} className="widget-arrow" />
+              {/* Language & Functional Currency Selector Dropdown */}
+              <div className="currency-widget-wrapper">
+                <div
+                  className="nav-widget lang-widget"
+                  title="Select Currency"
+                  onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
+                >
+                  <Globe size={16} className="lang-icon" />
+                  <span className="lang-text">{availableCurrencies[currency].label}</span>
+                  <ChevronDown size={12} className={`widget-arrow ${isCurrencyDropdownOpen ? 'open' : ''}`} />
+                </div>
+
+                {isCurrencyDropdownOpen && (
+                  <div className="currency-dropdown-menu">
+                    <div className="dropdown-menu-header">Select Platform Currency</div>
+                    {(Object.keys(availableCurrencies) as CurrencyCode[]).map((code) => (
+                      <button
+                        key={code}
+                        className={`currency-option ${currency === code ? 'active' : ''}`}
+                        onClick={() => {
+                          setCurrency(code);
+                          setIsCurrencyDropdownOpen(false);
+                        }}
+                      >
+                        <span className="code">{code}</span>
+                        <span className="label">{availableCurrencies[code].label}</span>
+                        {currency === code && <Check size={14} className="check-icon" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -166,7 +197,7 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Delivery & Language Widgets */}
+              {/* Delivery & Currency Selectors */}
               <div className="mobile-widgets-group">
                 <div className="nav-widget deliver-widget">
                   <span className="widget-label">Deliver to:</span>
@@ -176,9 +207,20 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <div className="nav-widget lang-widget">
-                  <Globe size={16} className="lang-icon" />
-                  <span className="lang-text">English-RWF</span>
+                {/* Mobile Currency Selector Buttons */}
+                <div className="mobile-currency-selector">
+                  <span className="mobile-currency-label">Currency:</span>
+                  <div className="mobile-currency-options">
+                    {(Object.keys(availableCurrencies) as CurrencyCode[]).map((code) => (
+                      <button
+                        key={code}
+                        className={`mobile-curr-btn ${currency === code ? 'active' : ''}`}
+                        onClick={() => setCurrency(code)}
+                      >
+                        {code}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -195,6 +237,10 @@ export default function Navbar() {
                 <Link to="/" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
                   <Sparkles size={18} className="sparkle-icon" />
                   <span>Hot Deals</span>
+                </Link>
+                <Link to="/wishlist" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Heart size={18} />
+                  <span>Wish list ({totalFavorites})</span>
                 </Link>
                 <Link to="/cart" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
                   <ShoppingCart size={18} />

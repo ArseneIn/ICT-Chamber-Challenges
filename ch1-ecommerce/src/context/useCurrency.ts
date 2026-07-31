@@ -1,0 +1,11 @@
+// src/context/useCurrency.ts
+import { useContext } from 'react';
+import { CurrencyContext } from './currencyContext';
+
+export function useCurrency() {
+  const context = useContext(CurrencyContext);
+  if (!context) {
+    throw new Error('useCurrency must be used within a CurrencyProvider');
+  }
+  return context;
+}

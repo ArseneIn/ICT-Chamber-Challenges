@@ -20,6 +20,7 @@ import { fetchProductById } from '../api/dummyjson';
 import type { Product } from '../api/dummyjson';
 import { useCart } from '../context/useCart';
 import { useWishlist } from '../context/useWishlist';
+import { useCurrency } from '../context/useCurrency';
 import SkeletonLoader from '../components/SkeletonLoader';
 import './ProductDetailsPage.css';
 
@@ -27,6 +28,7 @@ export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { formatPrice } = useCurrency();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>('');
@@ -100,8 +102,6 @@ export default function ProductDetailsPage() {
 
   const reviewCount = product.reviews ? product.reviews.length : 4;
   const soldEstimate = Math.floor(product.id * 23 + 12);
-  const subtotalPrice = (product.price * quantity).toFixed(2);
-  const rwfEstimate = Math.round(product.price * 1380 * quantity).toLocaleString();
 
   return (
     <main className="container product-details-page">
@@ -202,9 +202,7 @@ export default function ProductDetailsPage() {
           {/* Price Box */}
           <div className="alibaba-price-card">
             <div className="price-primary">
-              <span className="currency">$</span>
-              <span className="amount">{product.price.toFixed(2)}</span>
-              <span className="rwf-approx">(~ RF {rwfEstimate})</span>
+              <span className="amount">{formatPrice(product.price)}</span>
             </div>
             <p className="moq-note">
               Minimum order quantity: {product.minimumOrderQuantity || 1} piece
@@ -306,7 +304,7 @@ export default function ProductDetailsPage() {
             <div className="subtotal-summary">
               <div className="subtotal-row">
                 <span>Item subtotal:</span>
-                <span>${subtotalPrice}</span>
+                <span>{formatPrice(product.price * quantity)}</span>
               </div>
               <div className="subtotal-row">
                 <span>Shipping total:</span>
@@ -314,7 +312,7 @@ export default function ProductDetailsPage() {
               </div>
               <div className="subtotal-row total">
                 <span>Subtotal:</span>
-                <span className="total-val">${subtotalPrice}</span>
+                <span className="total-val">{formatPrice(product.price * quantity)}</span>
               </div>
             </div>
 
