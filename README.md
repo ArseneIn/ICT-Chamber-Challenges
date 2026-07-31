@@ -1,10 +1,10 @@
-# ICT Chamber Challenges 🚀
+# ICT Chamber Challenges 
 
 Welcome to the **ICT Chamber Challenges** repository! This repository serves as a centralized hub for all ICT Chamber competition entries, hackathons, web applications, mobile projects, and technical challenges.
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 Each challenge is self-contained in its own subfolder:
 
@@ -19,7 +19,7 @@ ICT-Chamber-Challenges/
 
 ---
 
-## 🏆 Challenge Index
+##  Challenge Index
 
 | # | Challenge Name | Type | Tech Stack | Status | Directory |
 |---|----------------|------|------------|--------|-----------|
@@ -27,7 +27,7 @@ ICT-Chamber-Challenges/
 
 ---
 
-## 🛠️ General Guidelines
+##  General Guidelines
 
 1. **Self-Contained Projects**: Every challenge folder must contain its own configuration (e.g. `package.json`, dependencies, build scripts, and `README.md`).
 2. **Git Hygiene**: Commit changes with clear messages specifying the challenge folder name.
