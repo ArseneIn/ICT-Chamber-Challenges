@@ -39,8 +39,9 @@ function AppContent() {
       {/* Automatically reset scroll position to top (0, 0) on route change */}
       <ScrollToTop />
 
-      {/* Navbar shows on every page */}
+      {/* Navbar shows on every page — position: fixed, needs spacer below */}
       <Navbar />
+      <div className="navbar-spacer" />
 
       {/* Routes define which page component renders for which URL */}
       <Routes>

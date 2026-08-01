@@ -4,12 +4,21 @@
    HEADER WRAPPER — sticky, two rows
 ───────────────────────────────────────── */
 .navbar-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 500;
+  left: 0;
+  right: 0;
+  z-index: 9000;
   width: 100%;
   background: #ffffff;
   box-shadow: 0 2px 12px rgba(13, 40, 24, 0.07);
+}
+
+/* Spacer that pushes page content below the fixed header */
+.navbar-spacer {
+  height: 102px; /* 64px top row + 38px bottom row */
+  width: 100%;
+  flex-shrink: 0;
 }
 
 /* Shared row base */
