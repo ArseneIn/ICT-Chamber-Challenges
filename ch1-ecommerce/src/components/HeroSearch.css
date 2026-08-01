@@ -1,5 +1,7 @@
 /* src/components/HeroSearch.css */
 .hero-search-wrapper {
+  position: relative;
+  z-index: 300;
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
@@ -81,6 +83,7 @@
 /* Search Bar Relative Wrapper */
 .search-bar-relative-wrapper {
   position: relative;
+  z-index: 400;
   width: 100%;
 }
 

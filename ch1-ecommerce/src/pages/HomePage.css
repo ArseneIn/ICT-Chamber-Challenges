@@ -6,6 +6,8 @@
 
 /* Hero Search Section */
 .hero-search-section {
+  position: relative;
+  z-index: 300;
   padding: var(--space-4) 0 var(--space-6) 0;
 }
 
