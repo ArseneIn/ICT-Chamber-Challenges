@@ -2,9 +2,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Camera } from 'lucide-react';
-import type { FormEvent, KeyboardEvent } from 'react';
-import { getSearchSuggestions, type SearchSuggestion } from '../data/searchSuggestions';
+import type { FormEvent } from 'react';
 import ImageSearchModal from './ImageSearchModal';
+import SearchAutocompleteDropdown from './SearchAutocompleteDropdown';
 import './HeroSearch.css';
 
 interface HeroSearchProps {
@@ -15,11 +15,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
   const [activeTab, setActiveTab] = useState<'ai' | 'products' | 'manufacturers' | 'worldwide'>('products');
   const [query, setQuery] = useState(initialQuery);
   const [isHidden, setIsHidden] = useState(false);
-
-  // Auto-complete & Suggestions State
-  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
 
   // Image Search Modal State
   const [isImageSearchOpen, setIsImageSearchOpen] = useState(false);
@@ -36,20 +32,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 2. Generate search suggestions dynamically on query change
-  useEffect(() => {
-    if (query.trim().length > 0) {
-      const items = getSearchSuggestions(query);
-      setSuggestions(items);
-      setShowSuggestions(items.length > 0);
-      setActiveIndex(-1);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  }, [query]);
-
-  // 3. Handle outside click to close suggestions dropdown
+  // 2. Handle outside click to close suggestions dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -60,7 +43,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 4. Perform search navigation
+  // 3. Perform search navigation
   const executeSearch = (searchKeyword: string) => {
     const finalQuery = searchKeyword.trim();
     if (finalQuery) {
@@ -71,31 +54,17 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (activeIndex >= 0 && suggestions[activeIndex]) {
-      executeSearch(suggestions[activeIndex].fullText);
-    } else {
-      executeSearch(query);
-    }
+    executeSearch(query);
   };
 
-  const handleSuggestionClick = (fullText: string) => {
+  const handleSelectQuery = (fullText: string) => {
     setQuery(fullText);
     executeSearch(fullText);
   };
 
-  // 5. Keyboard navigation (Arrow keys, Enter, Escape)
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!showSuggestions || suggestions.length === 0) return;
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
-    } else if (e.key === 'Escape') {
-      setShowSuggestions(false);
-    }
+  const handleSelectProduct = (productId: number) => {
+    setShowSuggestions(false);
+    navigate(`/products/${productId}`);
   };
 
   return (
@@ -141,13 +110,11 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
                 type="text"
                 placeholder="Search products, brands, or tech (e.g. shoes, laptop, beauty)..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => {
-                  if (query.trim().length > 0 && suggestions.length > 0) {
-                    setShowSuggestions(true);
-                  }
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setShowSuggestions(true);
                 }}
-                onKeyDown={handleKeyDown}
+                onFocus={() => setShowSuggestions(true)}
                 className="hero-search-input"
                 autoComplete="off"
               />
@@ -170,25 +137,14 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
             </button>
           </form>
 
-          {/* Dynamic Auto-complete Suggestions Dropdown Menu */}
-          {showSuggestions && suggestions.length > 0 && (
-            <div className="search-suggestions-dropdown">
-              {suggestions.map((item, idx) => (
-                <div
-                  key={idx}
-                  className={`suggestion-item ${idx === activeIndex ? 'active' : ''}`}
-                  onClick={() => handleSuggestionClick(item.fullText)}
-                  onMouseEnter={() => setActiveIndex(idx)}
-                >
-                  <Search size={15} className="suggestion-icon" />
-                  <div className="suggestion-text">
-                    <span className="suggestion-prefix">{item.prefix}</span>
-                    <strong className="suggestion-suffix"> {item.suffix}</strong>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Dynamic Auto-complete Suggestions + Product Result Cards Dropdown */}
+          <SearchAutocompleteDropdown
+            query={query}
+            isOpen={showSuggestions}
+            onSelectQuery={handleSelectQuery}
+            onSelectProduct={handleSelectProduct}
+            onViewAll={() => executeSearch(query)}
+          />
         </div>
       </div>
 

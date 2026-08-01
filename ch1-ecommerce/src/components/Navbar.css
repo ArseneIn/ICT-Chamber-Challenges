@@ -126,6 +126,22 @@
   font-weight: 300;
 }
 
+.scroll-camera-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.scroll-camera-btn:hover {
+  color: var(--color-sea-green);
+}
+
 .scroll-search-btn {
   background: var(--color-sea-green);
   border: none;

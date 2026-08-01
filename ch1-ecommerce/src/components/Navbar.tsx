@@ -3,13 +3,15 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ShoppingCart, Menu, Globe, User, ShieldCheck, Sparkles,
-  ChevronDown, X, Heart, Check, Search
+  ChevronDown, X, Heart, Check, Search, Camera
 } from 'lucide-react';
 import { useCart } from '../context/useCart';
 import { useWishlist } from '../context/useWishlist';
 import { useCurrency } from '../context/useCurrency';
 import type { CurrencyCode } from '../context/currencyContext';
 import CategoriesMegaMenu from './CategoriesMegaMenu';
+import SearchAutocompleteDropdown from './SearchAutocompleteDropdown';
+import ImageSearchModal from './ImageSearchModal';
 import './Navbar.css';
 
 // SVG Rwanda Flag
@@ -35,7 +37,14 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Search state
   const [scrollSearchQuery, setScrollSearchQuery] = useState('');
+  const [showNavSuggestions, setShowNavSuggestions] = useState(false);
+  const [isImageSearchOpen, setIsImageSearchOpen] = useState(false);
+
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const currencyRef = useRef<HTMLDivElement>(null);
 
   // Track scroll position to show compact search bar in top row
   useEffect(() => {
@@ -46,12 +55,14 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close currency dropdown on outside click
-  const currencyRef = useRef<HTMLDivElement>(null);
+  // Close currency dropdown and search dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (currencyRef.current && !currencyRef.current.contains(e.target as Node)) {
         setIsCurrencyDropdownOpen(false);
+      }
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setShowNavSuggestions(false);
       }
     };
     document.addEventListener('mousedown', handler);
@@ -61,239 +72,283 @@ export default function Navbar() {
   const handleScrollSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (scrollSearchQuery.trim()) {
-      navigate(`/?q=${encodeURIComponent(scrollSearchQuery.trim())}`);
-      setScrollSearchQuery('');
+      setShowNavSuggestions(false);
+      navigate(`/?search=${encodeURIComponent(scrollSearchQuery.trim())}`);
     }
   };
 
+  const handleSelectQuery = (fullText: string) => {
+    setScrollSearchQuery(fullText);
+    setShowNavSuggestions(false);
+    navigate(`/?search=${encodeURIComponent(fullText.trim())}`);
+  };
+
+  const handleSelectProduct = (productId: number) => {
+    setShowNavSuggestions(false);
+    navigate(`/products/${productId}`);
+  };
+
   return (
-    <header className="navbar-header">
+    <>
+      <header className="navbar-header">
 
-      {/* ── ROW 1: Logo | (scroll search) | Widgets | Cart | Auth ── */}
-      <div className="navbar-row navbar-row-top">
-        <div className="navbar-container">
+        {/* ── ROW 1: Logo | (scroll search) | Widgets | Cart | Auth ── */}
+        <div className="navbar-row navbar-row-top">
+          <div className="navbar-container">
 
-          {/* Logo */}
-          <Link to="/" className="navbar-logo" onClick={() => setIsMobileMenuOpen(false)}>
-            <img src="/shuwadilu-horizontal.png" alt="Shuwadilu" className="navbar-brand-logo" />
-          </Link>
-
-          {/* Scroll-reveal compact search bar — slides in after scrolling past hero */}
-          <div className={`navbar-scroll-search ${isScrolled ? 'visible' : ''}`}>
-            <form onSubmit={handleScrollSearch} className="scroll-search-form">
-              <input
-                type="text"
-                value={scrollSearchQuery}
-                onChange={(e) => setScrollSearchQuery(e.target.value)}
-                placeholder="Search products, brands, categories..."
-                className="scroll-search-input"
-              />
-              <button type="submit" className="scroll-search-btn" aria-label="Search">
-                <Search size={16} />
-              </button>
-            </form>
-          </div>
-
-          {/* Right widgets */}
-          <div className="navbar-right">
-
-            {/* Desktop Widgets */}
-            <div className="desktop-only-widgets">
-
-              {/* Deliver To */}
-              <div className="nav-widget deliver-widget" title="Select Delivery Location">
-                <span className="widget-label">Deliver to:</span>
-                <div className="widget-value">
-                  <RwandaFlag />
-                  <span className="country-code">RW</span>
-                </div>
-              </div>
-
-              {/* Currency Selector */}
-              <div className="currency-widget-wrapper" ref={currencyRef}>
-                <div
-                  className="nav-widget lang-widget"
-                  title="Select Currency"
-                  onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
-                >
-                  <Globe size={16} className="lang-icon" />
-                  <span className="lang-text">{availableCurrencies[currency].label}</span>
-                  <ChevronDown size={12} className={`widget-arrow ${isCurrencyDropdownOpen ? 'open' : ''}`} />
-                </div>
-
-                {isCurrencyDropdownOpen && (
-                  <div className="currency-dropdown-menu">
-                    <div className="dropdown-menu-header">Select Platform Currency</div>
-                    {(Object.keys(availableCurrencies) as CurrencyCode[]).map((code) => (
-                      <button
-                        key={code}
-                        className={`currency-option ${currency === code ? 'active' : ''}`}
-                        onClick={() => { setCurrency(code); setIsCurrencyDropdownOpen(false); }}
-                      >
-                        <span className="code">{code}</span>
-                        <span className="label">{availableCurrencies[code].label}</span>
-                        {currency === code && <Check size={14} className="check-icon" />}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Wishlist */}
-            <Link to="/wishlist" className="wishlist-nav-link" title="View Saved Favorites"
-              onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="wishlist-icon-wrapper">
-                <Heart size={20}
-                  className={totalFavorites > 0 ? 'filled-heart' : ''}
-                  fill={totalFavorites > 0 ? 'currentColor' : 'none'} />
-                {totalFavorites > 0 && <span className="wishlist-badge">{totalFavorites}</span>}
-              </div>
-              <span className="cart-label desktop-only">Wish list</span>
+            {/* Logo */}
+            <Link to="/" className="navbar-logo" onClick={() => setIsMobileMenuOpen(false)}>
+              <img src="/shuwadilu-horizontal.png" alt="Shuwadilu" className="navbar-brand-logo" />
             </Link>
 
-            {/* Cart */}
-            <Link to="/cart" className="cart-link" title="View Shopping Cart"
-              onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="cart-icon-wrapper">
-                <ShoppingCart size={20} />
-                {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
-              </div>
-              <span className="cart-label desktop-only">Cart</span>
-            </Link>
-
-            {/* Auth — desktop */}
-            <div className="auth-group desktop-only">
-              <button className="sign-in-btn">
-                <User size={16} />
-                <span>Sign in</span>
-              </button>
-              <button className="create-account-btn">Create account</button>
-            </div>
-
-            {/* Mobile Hamburger */}
-            <button className="mobile-hamburger-btn"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle Mobile Menu">
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── ROW 2: All Categories | Verified Products | Hot Deals | ─── About · Help · Sell ── */}
-      <div className="navbar-row navbar-row-bottom desktop-only">
-        <div className="navbar-container">
-
-          {/* Left nav links */}
-          <div className="bottom-nav-left">
-
-            {/* All Categories with mega menu */}
+            {/* Scroll-reveal compact search bar — slides in after scrolling past hero */}
             <div
-              className="categories-hover-wrapper"
-              onMouseEnter={() => setIsCategoriesHovered(true)}
-              onMouseLeave={() => setIsCategoriesHovered(false)}
+              className={`navbar-scroll-search ${isScrolled ? 'visible' : ''}`}
+              ref={searchContainerRef}
             >
-              <div className="nav-dropdown-btn bottom-nav-btn">
-                <Menu size={16} />
-                <span>All categories</span>
-                <ChevronDown size={13} className="dropdown-arrow" />
-              </div>
-              {isCategoriesHovered && (
-                <CategoriesMegaMenu onClose={() => setIsCategoriesHovered(false)} />
-              )}
-            </div>
-
-            <div className="bottom-nav-divider" />
-
-            <Link to="/" className="bottom-nav-link">
-              <ShieldCheck size={15} />
-              <span>Verified products</span>
-            </Link>
-
-            <Link to="/" className="bottom-nav-link hot-deals-link">
-              <Sparkles size={15} className="sparkle-icon" />
-              <span>Hot deals</span>
-            </Link>
-
-            <Link to="/categories" className="bottom-nav-link">
-              <span>All categories page</span>
-            </Link>
-          </div>
-
-          {/* Right utility links */}
-          <div className="bottom-nav-right">
-            <a href="#" className="bottom-nav-util-link">About ShuwaDilu</a>
-            <a href="#" className="bottom-nav-util-link">Help Center</a>
-            <a href="#" className="bottom-nav-util-link">Sell on ShuwaDilu</a>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Mobile Slide-Out Drawer */}
-      {isMobileMenuOpen && (
-        <div className="mobile-drawer-overlay" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
-            <div className="mobile-drawer-header">
-              <img src="/shuwadilu-horizontal.png" alt="Shuwadilu" className="drawer-logo" />
-              <button className="close-drawer-btn" onClick={() => setIsMobileMenuOpen(false)}>
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="mobile-drawer-content">
-              <div className="mobile-auth-section">
-                <button className="sign-in-btn mobile-full">
-                  <User size={16} />
-                  <span>Sign in</span>
+              <form onSubmit={handleScrollSearch} className="scroll-search-form">
+                <input
+                  type="text"
+                  value={scrollSearchQuery}
+                  onChange={(e) => {
+                    setScrollSearchQuery(e.target.value);
+                    setShowNavSuggestions(true);
+                  }}
+                  onFocus={() => setShowNavSuggestions(true)}
+                  placeholder="Search products, brands, categories..."
+                  className="scroll-search-input"
+                  autoComplete="off"
+                />
+                <button
+                  type="button"
+                  className="scroll-camera-btn"
+                  onClick={() => setIsImageSearchOpen(true)}
+                  title="Search by Image"
+                >
+                  <Camera size={15} />
                 </button>
-                <button className="create-account-btn mobile-full">Create account</button>
-              </div>
+                <button type="submit" className="scroll-search-btn" aria-label="Search">
+                  <Search size={16} />
+                </button>
+              </form>
 
-              <div className="mobile-widgets-group">
-                <div className="nav-widget deliver-widget">
+              {/* Dynamic Auto-complete Suggestions + Product Result Cards Dropdown */}
+              <SearchAutocompleteDropdown
+                query={scrollSearchQuery}
+                isOpen={showNavSuggestions}
+                onSelectQuery={handleSelectQuery}
+                onSelectProduct={handleSelectProduct}
+                onViewAll={() => handleScrollSearch({ preventDefault: () => {} } as React.FormEvent)}
+              />
+            </div>
+
+            {/* Right widgets */}
+            <div className="navbar-right">
+
+              {/* Desktop Widgets */}
+              <div className="desktop-only-widgets">
+
+                {/* Deliver To */}
+                <div className="nav-widget deliver-widget" title="Select Delivery Location">
                   <span className="widget-label">Deliver to:</span>
                   <div className="widget-value">
                     <RwandaFlag />
                     <span className="country-code">RW</span>
                   </div>
                 </div>
-                <div className="mobile-currency-selector">
-                  <span className="mobile-currency-label">Currency:</span>
-                  <div className="mobile-currency-options">
-                    {(Object.keys(availableCurrencies) as CurrencyCode[]).map((code) => (
-                      <button
-                        key={code}
-                        className={`mobile-curr-btn ${currency === code ? 'active' : ''}`}
-                        onClick={() => setCurrency(code)}
-                      >{code}</button>
-                    ))}
+
+                {/* Currency Selector */}
+                <div className="currency-widget-wrapper" ref={currencyRef}>
+                  <div
+                    className="nav-widget lang-widget"
+                    title="Select Currency"
+                    onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
+                  >
+                    <Globe size={16} className="lang-icon" />
+                    <span className="lang-text">{availableCurrencies[currency].label}</span>
+                    <ChevronDown size={12} className={`widget-arrow ${isCurrencyDropdownOpen ? 'open' : ''}`} />
                   </div>
+
+                  {isCurrencyDropdownOpen && (
+                    <div className="currency-dropdown-menu">
+                      <div className="dropdown-menu-header">Select Platform Currency</div>
+                      {(Object.keys(availableCurrencies) as CurrencyCode[]).map((code) => (
+                        <button
+                          key={code}
+                          className={`currency-option ${currency === code ? 'active' : ''}`}
+                          onClick={() => { setCurrency(code); setIsCurrencyDropdownOpen(false); }}
+                        >
+                          <span className="code">{code}</span>
+                          <span className="label">{availableCurrencies[code].label}</span>
+                          {currency === code && <Check size={14} className="check-icon" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <div className="mobile-nav-links">
-                <Link to="/categories" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Menu size={18} /><span>All Categories</span>
-                </Link>
-                <Link to="/" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
-                  <ShieldCheck size={18} /><span>Verified Products</span>
-                </Link>
-                <Link to="/" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Sparkles size={18} className="sparkle-icon" /><span>Hot Deals</span>
-                </Link>
-                <Link to="/wishlist" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Heart size={18} /><span>Wish list ({totalFavorites})</span>
-                </Link>
-                <Link to="/cart" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
-                  <ShoppingCart size={18} /><span>Shopping Cart ({totalItems})</span>
-                </Link>
+              {/* Wishlist */}
+              <Link to="/wishlist" className="wishlist-nav-link" title="View Saved Favorites"
+                onClick={() => setIsMobileMenuOpen(false)}>
+                <div className="wishlist-icon-wrapper">
+                  <Heart size={20}
+                    className={totalFavorites > 0 ? 'filled-heart' : ''}
+                    fill={totalFavorites > 0 ? 'currentColor' : 'none'} />
+                  {totalFavorites > 0 && <span className="wishlist-badge">{totalFavorites}</span>}
+                </div>
+                <span className="cart-label desktop-only">Wish list</span>
+              </Link>
+
+              {/* Cart */}
+              <Link to="/cart" className="cart-link" title="View Shopping Cart"
+                onClick={() => setIsMobileMenuOpen(false)}>
+                <div className="cart-icon-wrapper">
+                  <ShoppingCart size={20} />
+                  {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+                </div>
+                <span className="cart-label desktop-only">Cart</span>
+              </Link>
+
+              {/* Auth — desktop */}
+              <div className="auth-group desktop-only">
+                <button className="sign-in-btn">
+                  <User size={16} />
+                  <span>Sign in</span>
+                </button>
+                <button className="create-account-btn">Create account</button>
               </div>
+
+              {/* Mobile Hamburger */}
+              <button className="mobile-hamburger-btn"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle Mobile Menu">
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
             </div>
           </div>
         </div>
-      )}
-    </header>
+
+        {/* ── ROW 2: All Categories | Verified Products | Hot Deals | ─── About · Help · Sell ── */}
+        <div className="navbar-row navbar-row-bottom desktop-only">
+          <div className="navbar-container">
+
+            {/* Left nav links */}
+            <div className="bottom-nav-left">
+
+              {/* All Categories with mega menu */}
+              <div
+                className="categories-hover-wrapper"
+                onMouseEnter={() => setIsCategoriesHovered(true)}
+                onMouseLeave={() => setIsCategoriesHovered(false)}
+              >
+                <div className="nav-dropdown-btn bottom-nav-btn">
+                  <Menu size={16} />
+                  <span>All categories</span>
+                  <ChevronDown size={13} className="dropdown-arrow" />
+                </div>
+                {isCategoriesHovered && (
+                  <CategoriesMegaMenu onClose={() => setIsCategoriesHovered(false)} />
+                )}
+              </div>
+
+              <div className="bottom-nav-divider" />
+
+              <Link to="/" className="bottom-nav-link">
+                <ShieldCheck size={15} />
+                <span>Verified products</span>
+              </Link>
+
+              <Link to="/" className="bottom-nav-link hot-deals-link">
+                <Sparkles size={15} className="sparkle-icon" />
+                <span>Hot deals</span>
+              </Link>
+
+              <Link to="/categories" className="bottom-nav-link">
+                <span>All categories page</span>
+              </Link>
+            </div>
+
+            {/* Right utility links */}
+            <div className="bottom-nav-right">
+              <a href="#" className="bottom-nav-util-link">About ShuwaDilu</a>
+              <a href="#" className="bottom-nav-util-link">Help Center</a>
+              <a href="#" className="bottom-nav-util-link">Sell on ShuwaDilu</a>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Mobile Slide-Out Drawer */}
+        {isMobileMenuOpen && (
+          <div className="mobile-drawer-overlay" onClick={() => setIsMobileMenuOpen(false)}>
+            <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+              <div className="mobile-drawer-header">
+                <img src="/shuwadilu-horizontal.png" alt="Shuwadilu" className="drawer-logo" />
+                <button className="close-drawer-btn" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="mobile-drawer-content">
+                <div className="mobile-auth-section">
+                  <button className="sign-in-btn mobile-full">
+                    <User size={16} />
+                    <span>Sign in</span>
+                  </button>
+                  <button className="create-account-btn mobile-full">Create account</button>
+                </div>
+
+                <div className="mobile-widgets-group">
+                  <div className="nav-widget deliver-widget">
+                    <span className="widget-label">Deliver to:</span>
+                    <div className="widget-value">
+                      <RwandaFlag />
+                      <span className="country-code">RW</span>
+                    </div>
+                  </div>
+                  <div className="mobile-currency-selector">
+                    <span className="mobile-currency-label">Currency:</span>
+                    <div className="mobile-currency-options">
+                      {(Object.keys(availableCurrencies) as CurrencyCode[]).map((code) => (
+                        <button
+                          key={code}
+                          className={`mobile-curr-btn ${currency === code ? 'active' : ''}`}
+                          onClick={() => setCurrency(code)}
+                        >{code}</button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mobile-nav-links">
+                  <Link to="/categories" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Menu size={18} /><span>All Categories</span>
+                  </Link>
+                  <Link to="/" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+                    <ShieldCheck size={18} /><span>Verified Products</span>
+                  </Link>
+                  <Link to="/" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Sparkles size={18} className="sparkle-icon" /><span>Hot Deals</span>
+                  </Link>
+                  <Link to="/wishlist" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Heart size={18} /><span>Wish list ({totalFavorites})</span>
+                  </Link>
+                  <Link to="/cart" className="mobile-nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+                    <ShoppingCart size={18} /><span>Shopping Cart ({totalItems})</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Image Search Modal */}
+      <ImageSearchModal
+        isOpen={isImageSearchOpen}
+        onClose={() => setIsImageSearchOpen(false)}
+      />
+    </>
   );
 }
