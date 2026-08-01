@@ -92,10 +92,10 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
         </form>
 
       </div>
-      {/*Hero section with image*/}
+      {/* Hero section with image
       <div className="hero-section">Hero section for Image
         <div className="image-container"> Image container</div>
-      </div>
+      </div> */}
     </>
   );
 }
