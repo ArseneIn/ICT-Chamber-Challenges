@@ -16,7 +16,7 @@ import './HomePage.css';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchKeyword = searchParams.get('search') || '';
+  const searchKeyword = searchParams.get('search') || searchParams.get('q') || '';
 
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
