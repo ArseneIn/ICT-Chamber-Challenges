@@ -1,6 +1,6 @@
 // src/App.tsx
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -17,18 +17,21 @@ import PageLoader from './components/PageLoader';
 import FloatingCart from './components/FloatingCart';
 import ScrollToTop from './components/ScrollToTop';
 
-function App() {
-  const [initialLoading, setInitialLoading] = useState(true);
+function AppContent() {
+  const location = useLocation();
+  const [loading, setLoading] = useState(true);
 
+  // Trigger loader on every route change (including first load / reload)
   useEffect(() => {
+    setLoading(true);
     const timer = setTimeout(() => {
-      setInitialLoading(false);
+      setLoading(false);
     }, 1100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [location.pathname]);
 
-  if (initialLoading) {
-    return <PageLoader loadingText="Launching Shuwadilu Marketplace..." fullScreen />;
+  if (loading) {
+    return <PageLoader loadingText="Loading Shuwadilu Marketplace..." fullScreen />;
   }
 
   return (
@@ -56,6 +59,10 @@ function App() {
       <Footer />
     </div>
   );
+}
+
+function App() {
+  return <AppContent />;
 }
 
 export default App;
