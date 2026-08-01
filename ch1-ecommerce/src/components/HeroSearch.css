@@ -199,6 +199,15 @@
     padding: 4px 6px 4px 14px;
   }
 
+  /* Reduce placeholder font size on mobile */
+  .hero-search-input {
+    font-size: 13px;
+  }
+
+  .hero-search-input::placeholder {
+    font-size: 12px;
+  }
+
   .hero-search-btn span {
     display: none;
   }

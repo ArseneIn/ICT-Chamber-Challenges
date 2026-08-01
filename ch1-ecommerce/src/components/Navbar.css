@@ -730,10 +730,6 @@
   color: var(--color-sea-green);
 }
 
-/* ─────────────────────────────────────────
-   RESPONSIVE BREAKPOINTS
-───────────────────────────────────────── */
-
 /* Hide bottom row util links at medium sizes */
 @media (max-width: 1200px) {
   .bottom-nav-right {
@@ -762,20 +758,55 @@
   .mobile-hamburger-btn {
     display: flex !important;
     align-items: center;
+    flex-shrink: 0;
   }
 
   .navbar-scroll-search {
-    max-width: 260px;
+    max-width: 240px;
     margin: 0 var(--space-2);
+  }
+
+  /* Hide text labels for wishlist + cart on mobile — keep icons only */
+  .cart-label {
+    display: none !important;
   }
 }
 
 @media (max-width: 600px) {
+  /* Narrow search so hamburger is never pushed off screen */
   .navbar-scroll-search {
-    max-width: 180px;
+    max-width: 140px;
+    margin: 0 var(--space-1);
+  }
+
+  /* Shrink search input font & placeholder */
+  .scroll-search-input {
+    font-size: 11px;
+    padding: 7px 8px;
+  }
+
+  .scroll-search-btn {
+    padding: 7px 10px;
   }
 
   .navbar-brand-logo {
-    height: 28px;
+    height: 26px;
+  }
+
+  /* Tighten icon links on mobile */
+  .wishlist-nav-link,
+  .cart-link {
+    padding: 5px 6px;
+  }
+
+  .mobile-hamburger-btn {
+    padding: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Ultra-small: hide scroll search entirely, use icon only */
+  .navbar-scroll-search {
+    display: none;
   }
 }
