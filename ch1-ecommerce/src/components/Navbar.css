@@ -16,9 +16,16 @@
 
 /* Spacer that pushes page content below the fixed header */
 .navbar-spacer {
-  height: 102px; /* 64px top row + 38px bottom row */
+  height: 108px; /* 64px top row + 1px border + 38px bottom row + 1px border + 4px buffer */
   width: 100%;
   flex-shrink: 0;
+}
+
+/* Mobile: only top row is visible (bottom row hidden at <900px) */
+@media (max-width: 900px) {
+  .navbar-spacer {
+    height: 68px; /* 64px top row + 1px border + 3px buffer */
+  }
 }
 
 /* Shared row base */

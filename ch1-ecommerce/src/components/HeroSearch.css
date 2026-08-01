@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: var(--space-6) 0 var(--space-4) 0;
+  padding: var(--space-8) 0 var(--space-4) 0; /* extra top padding = breathing room below fixed navbar */
   display: flex;
   flex-direction: column;
   align-items: center;
