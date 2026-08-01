@@ -1,5 +1,5 @@
 // src/components/HeroSearch.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import type { FormEvent } from 'react';
@@ -12,7 +12,17 @@ interface HeroSearchProps {
 export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
   const [activeTab, setActiveTab] = useState<'ai' | 'products' | 'manufacturers' | 'worldwide'>('products');
   const [query, setQuery] = useState(initialQuery);
+  const [isHidden, setIsHidden] = useState(false);
   const navigate = useNavigate();
+
+  // Hide hero search when user scrolls past 90px (navbar search takes over)
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsHidden(window.scrollY > 90);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -26,7 +36,7 @@ export default function HeroSearch({ initialQuery = '' }: HeroSearchProps) {
     <>
 
 
-      <div className="hero-search-wrapper">
+      <div className={`hero-search-wrapper${isHidden ? ' hero-search-hidden' : ''}`}>
         <div className="search-tabs">
           <span className="tab-separator">|</span>
 

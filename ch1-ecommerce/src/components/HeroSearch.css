@@ -7,6 +7,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Scroll-hide animation */
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 300px;
+  overflow: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.35s ease, padding 0.3s ease;
+}
+
+/* Hidden state — fires when user scrolls past 90px */
+.hero-search-hidden {
+  opacity: 0;
+  transform: translateY(-12px);
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
 }
 
 /* Search Tabs */
