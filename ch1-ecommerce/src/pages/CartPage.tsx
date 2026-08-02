@@ -62,46 +62,51 @@ export default function CartPage() {
             <div key={product.id} className="cart-item-card">
               <img src={product.thumbnail} alt={product.title} className="cart-item-img" />
 
-              <div className="cart-item-details">
-                <Link to={`/products/${product.id}`} className="cart-item-title">
-                  {product.title}
-                </Link>
-                <span className="cart-item-category">{product.category}</span>
-                <span className="cart-item-unit-price">{formatPrice(product.price)} each</span>
-              </div>
+              <div className="cart-item-body">
+                <div className="cart-item-top">
+                  <div className="cart-item-details">
+                    <Link to={`/products/${product.id}`} className="cart-item-title">
+                      {product.title}
+                    </Link>
+                    <span className="cart-item-category">{product.category}</span>
+                    <span className="cart-item-unit-price">{formatPrice(product.price)} each</span>
+                  </div>
 
-              {/* Quantity Controls */}
-              <div className="quantity-controls">
-                <button
-                  onClick={() => updateQuantity(product.id, quantity - 1)}
-                  className="qty-btn"
-                  title="Decrease"
-                >
-                  <Minus size={14} />
-                </button>
-                <span className="qty-value">{quantity}</span>
-                <button
-                  onClick={() => updateQuantity(product.id, quantity + 1)}
-                  className="qty-btn"
-                  title="Increase"
-                >
-                  <Plus size={14} />
-                </button>
-              </div>
+                  <button
+                    onClick={() => removeFromCart(product.id)}
+                    className="remove-btn"
+                    title="Remove item"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
 
-              {/* Line Total */}
-              <div className="cart-item-total">
-                {formatPrice(product.price * quantity)}
-              </div>
+                <div className="cart-item-bottom">
+                  {/* Quantity Controls */}
+                  <div className="quantity-controls">
+                    <button
+                      onClick={() => updateQuantity(product.id, quantity - 1)}
+                      className="qty-btn"
+                      title="Decrease"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <span className="qty-value">{quantity}</span>
+                    <button
+                      onClick={() => updateQuantity(product.id, quantity + 1)}
+                      className="qty-btn"
+                      title="Increase"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
 
-              {/* Remove Button */}
-              <button
-                onClick={() => removeFromCart(product.id)}
-                className="remove-btn"
-                title="Remove item"
-              >
-                <Trash2 size={18} />
-              </button>
+                  {/* Line Total */}
+                  <div className="cart-item-total">
+                    {formatPrice(product.price * quantity)}
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
